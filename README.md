@@ -1,2 +1,2 @@
 # ProgramareDistribuita
-Repository for publishing homework and documenta.
+Repository for publishing homework and documentation.
