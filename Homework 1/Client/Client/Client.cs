@@ -39,7 +39,12 @@ namespace Client
 
                 var commandResponse = stream.Read(serverData, 0, serverData.Length);
                 var commandResponseMessage = Encoding.ASCII.GetString(serverData, 0, commandResponse);
-                System.Console.WriteLine(commandResponseMessage);
+
+                var commandResponseLines = commandResponseMessage.Split("&nbsp;");
+                foreach (var line in commandResponseLines)
+                {
+                    System.Console.WriteLine(line);
+                }
             }
 
             TcpClient.GetStream().Dispose();
