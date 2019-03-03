@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Server.Models;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -38,23 +39,27 @@ namespace Server
                         var client = clientTask.Result;
                         var message = string.Empty;
 
+                        var cart = new Cart();
+
                         while(message != null && !message.StartsWith("EXIT"))
                         {
+                            System.Console.WriteLine($"Received {message}.");
+
                             var clientData = new byte[ClientMesageSize];
                             client.GetStream().Read(clientData, 0, clientData.Length);
 
                             message = Encoding.ASCII.GetString(clientData);
 
-                            var messageParts = message.Split(" ");
-
-                            System.Console.WriteLine($"Received command {messageParts[0]}");
-                            if (messageParts.Length > 1)
-                            {
-                                System.Console.WriteLine($"With parameters {messageParts[1]}");
-                            }
-
                             var confirmationMessage = "MessageReceived...Wait for a response";
                             client.GetStream().Write(Encoding.ASCII.GetBytes(confirmationMessage), 0, confirmationMessage.Length);
+
+                            var cartOperations = new CartOperations(cart);
+
+                            var operationResult = cartOperations.ProcessCommand(message);
+
+                            System.Console.WriteLine($"Sending back: {operationResult}.");
+
+                            client.GetStream().Write(Encoding.ASCII.GetBytes(operationResult), 0, operationResult.Length);
                         }
 
                         System.Console.WriteLine("EXIT received...closing client!");

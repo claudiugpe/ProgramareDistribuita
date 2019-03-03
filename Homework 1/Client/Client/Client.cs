@@ -20,7 +20,7 @@ namespace Client
 
             while(message != null && !message.StartsWith("EXIT"))
             {
-                System.Console.WriteLine("Write command");
+                System.Console.WriteLine("Write VIEW_COMMANDS to view available commands.");
 
                 message = System.Console.ReadLine();
 
@@ -31,10 +31,15 @@ namespace Client
 
                 var serverData = new byte[ServerMessageSize];
 
-                var response = stream.Read(serverData, 0, serverData.Length);
-                var serverMessage = Encoding.ASCII.GetString(serverData, 0 ,response);
+                var confirmation = stream.Read(serverData, 0, serverData.Length);
+                var confirmationServerMessage = Encoding.ASCII.GetString(serverData, 0 , confirmation);
 
-                System.Console.WriteLine($"Received {serverMessage}");
+                System.Console.WriteLine($"Received {confirmationServerMessage}");
+                serverData = new byte[ServerMessageSize];
+
+                var commandResponse = stream.Read(serverData, 0, serverData.Length);
+                var commandResponseMessage = Encoding.ASCII.GetString(serverData, 0, commandResponse);
+                System.Console.WriteLine(commandResponseMessage);
             }
 
             TcpClient.GetStream().Dispose();
