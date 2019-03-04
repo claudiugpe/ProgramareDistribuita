@@ -1,7 +1,7 @@
 # ProgramareDistribuita
 Repository for publishing homework and documentation.
 
-##Homework 1
+## Homework 1
 Implement a TCP/IP Client Server application.
 
 Solution:
