@@ -9,11 +9,11 @@ module.exports = http.createServer((req, res) => {
     else if(req.method == 'POST'){
         handlePost(req, res);
     }
-    else if(req.method === 'DELETE'){
-        handleDelete(req, res);
-    }
     else if(req.method === 'PUT'){
         handlePut(req, res);
+    }
+    else if(req.method === 'DELETE'){
+        handleDelete(req, res);
     }
     else{
         InvalidRequest(req, res);

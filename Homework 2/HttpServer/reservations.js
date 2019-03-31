@@ -64,8 +64,6 @@ exports.update = function(reservation, id){
     var existingReservation = reservations.find(function(res){
         return res.id === id;
     });
-    
-    index = reservations.indexOf(existingReservation);
 
     if(reservation.hour){
         existingReservation.hour = reservation.hour;
@@ -73,6 +71,5 @@ exports.update = function(reservation, id){
     if(reservation.people){
         existingReservation.people = reservation.people;
     }
-
-    reservations[index] = existingReservation;
+    reservations.splice(reservations.indexOf(existingReservation), 1, existingReservation);
 };
