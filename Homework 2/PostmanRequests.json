@@ -1,0 +1,104 @@
+{
+	"variables": [],
+	"info": {
+		"name": "HttpServer",
+		"_postman_id": "fe56e6c2-2f85-33fa-10a4-353037f299b4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post",
+			"request": {
+				"url": "http://localhost:3000/reservations",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"people\": 2,\n\t\"hour\": \"2:00\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all",
+			"request": {
+				"url": "http://localhost:3000/reservations",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"people\": 30,\n    \"hour\": \"8:00\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get",
+			"request": {
+				"url": "http://localhost:3000/reservation/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all",
+			"request": {
+				"url": "http://localhost:3000/reservations",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"url": "http://localhost:3000/reservation/1",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put",
+			"request": {
+				"url": "http://localhost:3000/reservation/5",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"people\": \"30\",\n\t\"hour\": \"10:00\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
