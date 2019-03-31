@@ -16,7 +16,7 @@ module.exports = http.createServer((req, res) => {
         handlePut(req, res);
     }
     else{
-        handleUnknown(req, res);
+        InvalidRequest(req, res);
     }
 });
 
@@ -29,25 +29,19 @@ var handleGet = function(req, res){
     reqUrlParts.splice(0, 1);
 
     if(reqUrlParts[0] === 'reservations'){
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(reservations.getAll()));
+        OK(req, res, reservations.getAll());
     }
     else if(reqUrlParts[0] === 'reservation'){
         var reservation = reservations.getReservation(reqUrlParts[1]);
         if(reservation){
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(reservation));
+            OK(req, res, reservation);
         }
         else{
-            res.statusCode = 404;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end("Not found!");
+            notFound(req, res);
         }
     }
     else{
-        handleUnknown(req, res);
+        InvalidRequest(req, res);
     }
 };
 
@@ -64,17 +58,12 @@ var handlePost = function(req, res){
     });
 
     req.on('end', function () {
-
         postBody = JSON.parse(body);
-
         if(reqUrlParts[0] === 'reservations'){  
             var reservation = reservations.create(postBody);
-
-            res.statusCode = 201;
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(reservation));
+            created(req, res, reservation);
         }else{
-            handleUnknown();
+            InvalidRequest();
         }
     });
 };
@@ -92,26 +81,20 @@ var handlePut = function(req, res){
     });
 
     req.on('end', function () {
-
         putBody = JSON.parse(body);
-
         if(reqUrlParts[0] === 'reservation'){  
             var reservation = reservations.getReservation(reqUrlParts[1]);
             if(reservation){
                 reservations.update(putBody, reservation.id);
-                res.statusCode = 204;
-                res.setHeader('Content-Type', 'text/plain');
-                res.end('No content!');
+                noContent(req, res);
             }
             else{
-                var reservation = reservations.create(putBody);
-                res.statusCode = 201;
-                res.setHeader('Content-Type', 'text/plain');
-                res.end('Created!');
+                var reservation = reservations.create(putBody, reqUrlParts[1]);
+                created(req, res, reservation);
             }
 
         }else{
-            handleUnknown(req, res);
+            InvalidRequest(req, res);
         }
     });
 }
@@ -124,31 +107,49 @@ var handleDelete = function(req, res){
     reqUrlParts.splice(0, 1);
 
     if(reqUrlParts[0] === 'reservations'){
-        res.statusCode = 204;
-        res.setHeader('Content-Type', 'text/plain');
         reservations.deleteAll();
-        res.end('No content!');
+        noContent(req, res);
     }
     else if(reqUrlParts[0] === 'reservation'){
         console.log(reqUrlParts[1]);
         var status = reservations.delete(reqUrlParts[1]);
         if(status){
-            res.statusCode = 204;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end('No content!');
+            noContent(req, res);
         }
         else{
-            res.statusCode = 404;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end("Not found!");
+            notFound(req, res);
         }
     }
     else{
-        handleUnknown(req, res);
+        InvalidRequest(req, res);
     }
 };
 
-var handleUnknown = function(req, res){
+var OK = function(req, res, data){
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(data));
+};
+
+var notFound = function(req, res){
+    res.statusCode = 404;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end("Not found!");
+};
+
+var created = function(req, res, data){
+    res.statusCode = 201;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end(JSON.stringify(data));
+};
+
+var noContent = function(req, res){
+    res.statusCode = 204;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('No content!');
+};
+
+var InvalidRequest = function(req, res){
     res.statusCode = 404;
     res.setHeader('Content-Type', 'text/plain');
     res.end('Invalid Request');

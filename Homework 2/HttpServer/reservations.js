@@ -41,10 +41,14 @@ exports.deleteAll = function(){
     reservations.length = 0;
 };
 
-exports.create = function(reservation){
+exports.create = function(reservation, reqId){
     var id = Math.max.apply(Math, reservations.map(function(reservation) { 
         return reservation.id; })) + 1;
     
+    if(reqId){
+        id = reqId;
+    }
+
     reservations.push({
         id: id,
         people: reservation.people,
